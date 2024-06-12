@@ -1,30 +1,32 @@
 package com.example.demo.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.HashMap;
 import java.time.LocalDate;
-
+@Document
 public class Task {
-    private Long id;
+    @Id
+    private String id;
     private String name;
     private String description;
-    private LocalDate dueDate;
 
     // Constructors, Getters and Setters
     public Task() {
     }
 
-    public Task(Long id, String name, String description, LocalDate dueDate) {
+    public Task(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.dueDate = dueDate;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -42,13 +44,5 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
     }
 }

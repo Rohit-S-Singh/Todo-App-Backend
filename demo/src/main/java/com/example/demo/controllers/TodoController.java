@@ -1,7 +1,10 @@
 package com.example.demo.controllers;
 
-
 import com.example.demo.entity.Task;
+import com.example.demo.service.TodoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -12,8 +15,10 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/todos")
 public class TodoController {
 
+    @Autowired
+    private TodoService newtodoservice;
 
-    private Map<Long, Task> taskMap = new HashMap<>();
+    private Map<String, Task> taskMap = new HashMap<>();
     private AtomicLong counter = new AtomicLong();
 
 
@@ -23,14 +28,18 @@ public class TodoController {
     }
 
     @PostMapping("/addTask")
-    public String addTask(@RequestBody Task task) {
+    public ResponseEntity<Map<String, String>> addTask(@RequestBody Task task) {
 
-        System.out.println("abcd is getting added---------------");
+        newtodoservice.saveTask(task);
 
-        long id = counter.incrementAndGet();
-        task.setId(id);
-        taskMap.put(id, task);
-        return "Task added successfully with ID: " + id;
+        System.out.println("abcd is getting added---------------"+task);
+
+        Map<String,String> hs = new HashMap();
+
+        hs.put("status","200");
+        hs.put("message","Task is successfully addded");
+
+        return new ResponseEntity<>(hs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -48,7 +57,7 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public String updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
+    public String updateTask(@PathVariable String id, @RequestBody Task updatedTask) {
         if (taskMap.containsKey(id)) {
             updatedTask.setId(id);
             taskMap.put(id, updatedTask);
@@ -57,15 +66,5 @@ public class TodoController {
             return "Task not found.";
         }
     }
-
-    @GetMapping("/all")
-    public Map<Long, Task> getAllTasks() {
-        return taskMap;
-    }
-
-
-
-
-
 
 }
