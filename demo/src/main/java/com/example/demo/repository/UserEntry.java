@@ -5,9 +5,4 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserEntry extends MongoRepository<User,String> {
 
-
-
-
-
-
 }
